@@ -400,12 +400,67 @@
   .res-ico  { font-size:5rem; margin-bottom:14px; }
   .res-pts  { font-family:Arial; font-size:.9rem; color:var(--muted); margin-bottom:22px; }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width:560px) {
-    .opts, .two-col, .social-row { grid-template-columns:1fr; }
-    .tl { flex-direction:column; gap:20px; }
-    .tl-node::after { display:none; }
-    .ig-posts { grid-template-columns:1fr; }
+  /* ── RESPONSIVE MÓVIL ── */
+  @media (max-width:768px) {
+    /* Tipografía */
+    h1 { font-size: clamp(1.8rem, 8vw, 3rem); }
+    h2 { font-size: clamp(1.3rem, 6vw, 2rem); }
+    p.body { font-size: .93rem; padding: 0 4px; }
+
+    /* Padding de secciones */
+    .inn { padding: 32px 16px 80px; }
+
+    /* Grillas → una columna */
+    .opts, .two-col, .social-row,
+    .eje-grid, .fuentes-grid, .tm-grid,
+    .tgrid, .grid3 { grid-template-columns: 1fr; }
+
+    /* Timeline vertical */
+    .tl { flex-direction: column; gap: 14px; align-items: center; }
+    .tl-node { width: 100%; max-width: 200px; }
+    .tl-node::after { display: none; }
+
+    /* Instagram posts */
+    .ig-posts { grid-template-columns: 1fr; }
+
+    /* Video ratio */
+    .vid-wrap { aspect-ratio: 16/9; }
+
+    /* Logo portada */
+    img[alt*="Tarifario"] { width: clamp(140px, 70vw, 240px) !important; }
+
+    /* Botones en columna si son muchos */
+    .row { flex-direction: column; align-items: center; }
+    .btn { width: 100%; max-width: 320px; justify-content: center; }
+
+    /* Panel nav más ancho en móvil */
+    #nav-panel { width: 80vw; right: -82vw; }
+    #nav-panel.open { right: 0; }
+
+    /* Crédito oculto en móvil */
+    #credit { display: none; }
+
+    /* Stat numbers más pequeños */
+    .stat .num { font-size: 2rem; }
+
+    /* Fuente cards */
+    .fuente-card { flex-direction: row; align-items: flex-start; gap: 12px; }
+    .fuente-card .fc-ico { font-size: 1.4rem; margin-top: 2px; }
+
+    /* Game opciones */
+    .opts { grid-template-columns: 1fr; }
+    .gm-head { flex-direction: column; gap: 8px; align-items: flex-start; }
+
+    /* Testimony */
+    .tcard { padding: 14px; }
+
+    /* Buzon form */
+    .buzon-form { padding: 0 4px; }
+  }
+
+  @media (max-width:380px) {
+    h1 { font-size: 1.6rem; }
+    .btn { font-size: .7rem; padding: 12px 16px; }
   }
 </style>
 </head>
