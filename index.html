@@ -40,6 +40,59 @@
     letter-spacing:.12em; color:#2a2a2a; z-index:999;
   }
 
+  /* ── HAMBURGER BTN ── */
+  #ham-btn {
+    position:fixed; top:16px; right:20px; z-index:1100;
+    width:42px; height:42px;
+    background:var(--card); border:1px solid var(--border);
+    cursor:pointer; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:5px;
+    transition:background .25s;
+  }
+  #ham-btn:hover { background:var(--card2); }
+  #ham-btn span {
+    display:block; width:20px; height:2px;
+    background:var(--gold); transition:all .3s ease;
+  }
+  #ham-btn.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+  #ham-btn.open span:nth-child(2) { opacity:0; }
+  #ham-btn.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+
+  /* ── SIDE PANEL ── */
+  #nav-panel {
+    position:fixed; top:0; right:-280px; width:260px; height:100%;
+    background:#0f0f0f; border-left:1px solid var(--border);
+    z-index:1050; transition:right .35s cubic-bezier(.4,0,.2,1);
+    display:flex; flex-direction:column; padding:72px 0 32px;
+    overflow-y:auto;
+  }
+  #nav-panel.open { right:0; }
+
+  .nav-section-label {
+    font-family:Arial,sans-serif; font-size:.6rem;
+    letter-spacing:.28em; text-transform:uppercase;
+    color:var(--muted); padding:0 24px; margin:16px 0 8px;
+  }
+  .nav-link {
+    display:flex; align-items:center; gap:12px;
+    padding:11px 24px; cursor:pointer;
+    font-family:Arial,sans-serif; font-size:.82rem;
+    color:#aaa; border-left:2px solid transparent;
+    transition:all .2s; text-align:left; background:none; border-top:none; border-right:none; border-bottom:none;
+    width:100%;
+  }
+  .nav-link:hover { color:var(--white); border-left-color:var(--gold); background:rgba(245,197,24,.05); }
+  .nav-link.active-link { color:var(--gold); border-left-color:var(--gold); }
+  .nav-link .nl-ico { font-size:1rem; flex-shrink:0; }
+
+  /* ── OVERLAY ── */
+  #overlay {
+    position:fixed; inset:0; background:rgba(0,0,0,.55);
+    z-index:1040; opacity:0; pointer-events:none;
+    transition:opacity .35s ease;
+  }
+  #overlay.open { opacity:1; pointer-events:all; }
+
   /* ── SECTIONS ── */
   .sec {
     position:fixed; inset:0;
@@ -360,6 +413,37 @@
 
 <div id="bar" style="width:0%"></div>
 <div id="credit">LA TARIFA QUE NUNCA BAJÓ · TRUJILLO</div>
+
+<!-- HAMBURGER -->
+<button id="ham-btn" onclick="toggleNav()" aria-label="Menú">
+  <span></span><span></span><span></span>
+</button>
+
+<!-- OVERLAY -->
+<div id="overlay" onclick="closeNav()"></div>
+
+<!-- SIDE NAV PANEL -->
+<div id="nav-panel">
+  <div class="nav-section-label">Navegación</div>
+
+  <button class="nav-link active-link" onclick="navGo(0)"><span class="nl-ico">🏠</span> Portada</button>
+  <button class="nav-link" onclick="navGo(1)"><span class="nl-ico">⛽</span> El Origen</button>
+  <button class="nav-link" onclick="navGo(2)"><span class="nl-ico">📌</span> Ejes Temáticos</button>
+  <button class="nav-link" onclick="navGo(3)"><span class="nl-ico">🎙</span> Las Fuentes</button>
+  <button class="nav-link" onclick="navGo(4)"><span class="nl-ico">🎬</span> El Reportaje</button>
+
+  <div class="nav-section-label">Redes &amp; Proyecto</div>
+
+  <button class="nav-link" onclick="navGo(5)"><span class="nl-ico">📱</span> En Redes</button>
+  <button class="nav-link" onclick="navGo(6)"><span class="nl-ico">🗺</span> Mapa Transmedia</button>
+
+  <div class="nav-section-label">Interactivo</div>
+
+  <button class="nav-link" onclick="navGo(7)"><span class="nl-ico">🕵️</span> Detective de Tarifas</button>
+  <button class="nav-link" onclick="navGo(10)"><span class="nl-ico">📨</span> Buzón Ciudadano</button>
+  <button class="nav-link" onclick="navGo(11)"><span class="nl-ico">🔍</span> Hallazgos</button>
+  <button class="nav-link" onclick="navGo(12)"><span class="nl-ico">🚌</span> Cierre</button>
+</div>
 
 <!-- ════════════════════════════════════
   S0  PORTADA
@@ -870,6 +954,34 @@ function go(n) {
   if (inn) inn.scrollTop = 0;
   cur = n;
   document.getElementById('bar').style.width = (n / (TOTAL - 1) * 100) + '%';
+  updateNavLinks(n);
+}
+
+/* ── HAMBURGER ── */
+function toggleNav() {
+  const btn   = document.getElementById('ham-btn');
+  const panel = document.getElementById('nav-panel');
+  const ov    = document.getElementById('overlay');
+  btn.classList.toggle('open');
+  panel.classList.toggle('open');
+  ov.classList.toggle('open');
+}
+function closeNav() {
+  document.getElementById('ham-btn').classList.remove('open');
+  document.getElementById('nav-panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+function navGo(n) {
+  go(n);
+  closeNav();
+}
+function updateNavLinks(n) {
+  document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active-link'));
+  const links = document.querySelectorAll('.nav-link');
+  // map section index to nav order
+  const map = [0,1,2,3,4,5,6,7,10,11,12];
+  const idx = map.indexOf(n);
+  if (idx >= 0 && links[idx]) links[idx].classList.add('active-link');
 }
 
 /* ── GAME DATA ── */
