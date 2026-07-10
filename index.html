@@ -340,7 +340,7 @@ p.body{font-size:clamp(.88rem,1.4vw,1.02rem);line-height:1.82;color:#bbb;max-wid
   overflow:hidden;
   pointer-events:none;
 }
-#bg-video iframe{
+#bg-video video{
   position:absolute;
   top:50%;left:50%;
   /* cubre toda la pantalla en 16:9 */
@@ -414,12 +414,9 @@ p.body{font-size:clamp(.88rem,1.4vw,1.02rem);line-height:1.82;color:#bbb;max-wid
 <body>
 
 <div id="bg-video">
-  <iframe
-    src="https://drive.google.com/file/d/1SuDXL4EnXS4wo4RUposA_72lItM_C97h/preview?autoplay=1&mute=1"
-    allow="autoplay; fullscreen"
-    allowfullscreen
-    frameborder="0"
-  ></iframe>
+  <video autoplay muted loop playsinline preload="auto">
+    <source src="teaser.mp4" type="video/mp4">
+  </video>
 </div>
 <div id="welcome-modal">
   <div id="welcome-modal-inner">
