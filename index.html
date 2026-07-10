@@ -12,7 +12,7 @@
   --border:rgba(245,197,24,.18);--muted:#666;--white:#fff;
   --hh:56px;
 }
-html{scroll-behavior:smooth;}body{width:100%;overflow-x:hidden;background:var(--dark);color:var(--white);font-family:'Georgia','Times New Roman',serif;}
+html{scroll-behavior:smooth;}body{width:100%;overflow-x:hidden;background:#000;color:var(--white);font-family:'Georgia','Times New Roman',serif;position:relative;}
 #hdr{position:fixed;top:0;left:0;right:0;height:var(--hh);display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(8,8,8,.92);border-bottom:1px solid var(--border);z-index:1100;backdrop-filter:blur(8px);}
 #hdr-left{display:flex;align-items:center;gap:10px;}
 #hdr-chip{font-family:Arial,sans-serif;font-size:.58rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;}
@@ -344,10 +344,102 @@ p.body{font-size:clamp(.88rem,1.4vw,1.02rem);line-height:1.82;color:#bbb;max-wid
   #minimap-panel{width:96vw;max-height:84vh;}
   #minimap-img-wrap{width:560px;}
 }
+
+/* ── FONDO VIDEO ── */
+#bg-video{
+  position:fixed;inset:0;z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+#bg-video iframe{
+  position:absolute;
+  top:50%;left:50%;
+  /* cubre toda la pantalla en 16:9 */
+  width:177.78vh;
+  height:56.25vw;
+  min-width:100%;
+  min-height:100%;
+  transform:translate(-50%,-50%);
+  filter:brightness(0.22) contrast(0.82) saturate(0.7);
+  border:none;
+}
+/* overlay oscuro encima del video */
+#bg-overlay{
+  position:fixed;inset:0;z-index:0;
+  background:rgba(0,0,0,0.62);
+  pointer-events:none;
+}
+
+/* ── POPUP MAPA INICIAL ── */
+#welcome-modal{
+  position:fixed;inset:0;z-index:2000;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,0.82);
+  backdrop-filter:blur(4px);
+  animation:fadeInModal .5s ease;
+}
+@keyframes fadeInModal{from{opacity:0}to{opacity:1}}
+#welcome-modal-inner{
+  position:relative;
+  max-width:88vw;max-height:88vh;
+  border:2px solid var(--gold);
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 0 60px rgba(245,197,24,.25);
+}
+#welcome-modal-inner img{
+  display:block;
+  max-width:100%;max-height:85vh;
+  object-fit:contain;
+  background:#fff;
+}
+#welcome-close{
+  position:absolute;top:10px;right:12px;
+  background:var(--gold);color:#000;
+  border:none;border-radius:50%;
+  width:34px;height:34px;
+  font-size:18px;font-weight:700;
+  cursor:pointer;z-index:10;
+  line-height:34px;text-align:center;
+  padding:0;
+}
+#welcome-close:hover{background:#fff;}
+#welcome-title{
+  position:absolute;bottom:0;left:0;right:0;
+  background:rgba(0,0,0,0.75);
+  color:var(--gold);
+  text-align:center;
+  padding:10px 16px;
+  font-size:13px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+/* asegurar que todo el contenido quede por encima */
+#hdr,#bar,#nav-panel,#overlay,#toast,#minimap-toggle,#minimap-backdrop,#minimap-panel{z-index:1100;}
+#nav-panel{z-index:1200;}
+#minimap-backdrop{z-index:1300;}
+#minimap-panel{z-index:1310;}
+.sec{z-index:1;position:relative;}
 </style>
 </head>
 <body>
 
+<div id="bg-video">
+  <iframe
+    src="https://drive.google.com/file/d/1NV0L0fd_6caBV9KzWJUD9jgcWIsddB1R/preview?autoplay=1&loop=1"
+    allow="autoplay; fullscreen"
+    allowfullscreen
+    frameborder="0"
+  ></iframe>
+</div>
+<div id="welcome-modal">
+  <div id="welcome-modal-inner">
+    <button id="welcome-close" title="Cerrar">✕</button>
+    <img id="welcome-map-img" src="" alt="Mapa de ruta transmedia Tarifario.trux">
+    <div id="welcome-title">Mapa de ruta transmedia — Tarifario.trux</div>
+  </div>
+</div>
+<div id="bg-overlay"></div>
 <header id="hdr">
   <div id="hdr-left"><span id="hdr-chip">Investigación Periodística</span></div>
   <div id="hdr-right">
@@ -751,6 +843,25 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),2800);
   closeNav();
 }
+
+
+
+/* ── POPUP MAPA INICIAL ── */
+document.addEventListener('DOMContentLoaded', function(){
+  // Cargar imagen del mapa desde el minimap ya embebido
+  var mapSrc = document.querySelector('#minimap-img-wrap img');
+  if(mapSrc) document.getElementById('welcome-map-img').src = mapSrc.src;
+  
+  function closeWelcome(){
+    var m = document.getElementById('welcome-modal');
+    if(m){ m.style.opacity='0'; m.style.transition='opacity .4s'; setTimeout(function(){m.remove();},400); }
+  }
+  document.getElementById('welcome-close').addEventListener('click', closeWelcome);
+  document.getElementById('welcome-modal').addEventListener('click', function(e){
+    if(e.target === this) closeWelcome();
+  });
+});
+
 /* scroll-based progress + active section tracking */
 window.addEventListener('scroll',function(){
   const hh=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--hh'))||56;
