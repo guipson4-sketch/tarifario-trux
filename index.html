@@ -219,19 +219,16 @@ p.body{font-size:clamp(.88rem,1.4vw,1.02rem);line-height:1.82;color:#bbb;max-wid
   overflow:hidden;
   pointer-events:none;
 }
-#bg-drive-wrap{
-  position:absolute;inset:0;
-  overflow:hidden;
-}
-#bg-drive-iframe{
+#bg-video video{
   position:absolute;
   top:50%;left:50%;
-  width:177.78vh;height:100vh;
-  min-width:100vw;min-height:56.25vw;
+  width:177.78vh;
+  height:56.25vw;
+  min-width:100%;
+  min-height:100%;
   transform:translate(-50%,-50%);
-  border:0;
   filter:brightness(0.38) contrast(0.88) saturate(0.65);
-  pointer-events:none;
+  border:none;
 }
 /* overlay oscuro encima del video */
 #bg-overlay{
@@ -298,13 +295,9 @@ p.body{font-size:clamp(.88rem,1.4vw,1.02rem);line-height:1.82;color:#bbb;max-wid
 </div>
 
 <div id="bg-video">
-  <div id="bg-drive-wrap">
-    <iframe src="https://drive.google.com/file/d/1CoPT83OWdpnyoFaUE2KFdJIhAtqf8IPR/preview"
-            frameborder="0"
-            allow="autoplay; encrypted-media"
-            allowfullscreen
-            id="bg-drive-iframe"></iframe>
-  </div>
+  <video autoplay muted loop playsinline preload="auto">
+    <source src="teaser.mp4" type="video/mp4">
+  </video>
 </div>
 
 <div id="bg-overlay"></div>
@@ -1143,11 +1136,6 @@ function gz_reiniciar(){
 
 </div>
 
-    <div class="row" style="margin-top:16px;">
-      <button class="btn ghost" onclick="go(6)">← VOLVER</button>
-      <button class="btn" onclick="go(8)">BUZÓN CIUDADANO &nbsp;→</button>
-    </div>
-  
     <div class="row">
       <button class="btn ghost" onclick="go(6)">← Carlos Felipe Pardo</button>  <button class="btn" onclick="go(8)">Comunidad →</button>
     </div>
